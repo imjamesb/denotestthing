@@ -1,0 +1,20 @@
+name: ci
+
+on: [push, pull_request]
+
+jobs:
+  ci:
+    name: Format, Lint and Test
+    runs-on: ubuntu-latest
+    if: "!startsWith(github.event.head_commit.message, 'WIP:')"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1
+      - name: "Format Check"
+        run: deno fmt --check
+      - name: "Lint Check"
+        run: deno lint
+      - name: Tests
+        run: deno test --allow-all
